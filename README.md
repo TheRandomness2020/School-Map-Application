@@ -12,3 +12,5 @@ cd /Your/File/Location
 git clone -b master https://github.com/TheRandomness2020/School-Map-Application.git
 
 and then open the folder it makes in unity
+
+Ill Explane Pushing and makeing new branches later
