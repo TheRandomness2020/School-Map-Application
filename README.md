@@ -24,6 +24,7 @@ cd /Your/File/Location
 
 **Make A New Branch**
 **(Do This Only Once)**
+
 git checkout -b NEW_BRANCH_NAME
 
 **Put Your Files In The Branch**
