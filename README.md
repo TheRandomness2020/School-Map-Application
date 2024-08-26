@@ -18,7 +18,7 @@ and then open the folder it makes in unity
 
 Ill Explane Pushing and makeing new branches later
 
-**How To Upload Your Code**
+**----------How To Upload Your Code----------**
 
 cd /Your/File/Location
 
