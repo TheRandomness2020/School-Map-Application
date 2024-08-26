@@ -7,6 +7,8 @@ First Download Git Onto You Computer
 
 find your file you want the app to be in make sure it is blank or only has other folders
 
+Open Command Prompt
+
 cd /Your/File/Location
 
 git clone -b master https://github.com/TheRandomness2020/School-Map-Application.git
