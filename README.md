@@ -29,4 +29,6 @@ git checkout -b NEW_BRANCH_NAME
 
 **Put Your Files In The Branch**
 
+git add .
+
 git push -u origin (branch_name) 
