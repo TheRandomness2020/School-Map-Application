@@ -18,7 +18,8 @@ public class Wall : MonoBehaviour
         // Create the line object
         lineObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
         lineObject.AddComponent<BoxCollider>();
-        gameObject.AddComponent<MovementWall>();
+        if(transform.parent.GetComponent<HallGenertationScript>() != true)
+            gameObject.AddComponent<MovementWall>();
         lineObject.transform.parent = this.transform;
         if (lineMaterial != null)
         {
@@ -32,11 +33,11 @@ public class Wall : MonoBehaviour
     {
         // Continuously update the line position, rotation, and scale
         UpdateLine();
-
-        if (lineMaterial != transform.parent.GetComponent<Room>().material)
-        {
-            UpdateLineMaterial();
-        }
+        if(transform.parent.GetComponent<HallGenertationScript>() != true)
+            if (lineMaterial != transform.parent.GetComponent<Room>().material)
+            {
+                UpdateLineMaterial();
+            }
     }
 
     void UpdateLine()

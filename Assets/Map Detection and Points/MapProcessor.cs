@@ -265,7 +265,8 @@ public class MapProcessor : MonoBehaviour
                 RoomInfo roomInfo = new RoomInfo
                 {
                     roomPoint = center,
-                    corners = corners
+                    corners = corners,
+                    roomNumber = roomCount
                 };
 
                 roomInfos.Add(roomInfo);
@@ -340,6 +341,7 @@ public class MapProcessor : MonoBehaviour
         {
             Vector3 centerPosition = new Vector3(roomInfo.roomPoint.x, roomInfo.roomPoint.y, 0);
             GameObject roomPoint = Instantiate(roomPointPrefab, centerPosition, Quaternion.identity);
+            roomPoint.name = "Room : " + roomInfo.roomNumber;
             roomPoint.layer = 6;
             gCV.rooms.Add(roomPoint);
             roomPoint.transform.parent = transform;
@@ -347,6 +349,7 @@ public class MapProcessor : MonoBehaviour
             roomPoint.AddComponent<MovementRoom>();
             Room roomComponent = roomPoint.AddComponent<Room>();
             roomComponent.material = wallMaterial;
+            roomComponent.roomNumber = roomInfo.roomNumber;
             //roomComponent.InitializeRoom(roomInfo.roomPoint, roomInfo.corners);
 
             // Optionally visualize the room corners
@@ -441,5 +444,6 @@ public class MapProcessor : MonoBehaviour
     {
         public Vector2 roomPoint;
         public List<Vector2> corners;
+        public int roomNumber;
     }
 }

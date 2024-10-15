@@ -10,6 +10,7 @@ public class Room : MonoBehaviour
     public MeshCollider clickBox;
     public GameObject pointTester;
     public Material material;
+    public int roomNumber;
     public float width = 10;
     public float depth = 10;
     public int numCorners = 4;
