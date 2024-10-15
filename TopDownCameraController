@@ -1,0 +1,35 @@
+using UnityEngine;
+
+public class TopDownCameraController : MonoBehaviour
+{
+    public float movementSpeed = 5.0f;
+    public float zoomSpeed = 10.0f;
+    public float minZoom = 5.0f;
+    public float maxZoom = 20.0f;
+
+    private Camera _camera;
+    private float _zoomLevel;
+
+    void Start()
+    {
+        _camera = GetComponent<Camera>();
+        _zoomLevel = _camera.orthographicSize;
+    }
+
+    void Update()
+    {
+        // Handle movement
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        // Move the camera with more control
+        Vector3 moveDirection = new Vector3(horizontalInput, verticalInput, 0).normalized;
+        transform.Translate(moveDirection * movementSpeed * Time.deltaTime);
+
+        // Handle zooming
+        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
+        _zoomLevel -= scrollInput * zoomSpeed * Time.deltaTime;
+        _zoomLevel = Mathf.Clamp(_zoomLevel, minZoom, maxZoom);
+        _camera.orthographicSize = _zoomLevel;
+    }
+}
