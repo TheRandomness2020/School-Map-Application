@@ -19,6 +19,8 @@ public class ButtonCalls : MonoBehaviour
     // Each button will use this script, but likely only call one method 
     // from this script. 
 
+    // Handle Button Calls
+    // **********************************
     public void HandleUploadButton()
     {
         // Code for Uploading a File
@@ -27,20 +29,21 @@ public class ButtonCalls : MonoBehaviour
         UploadFile();
     }
 
-    private void UploadFile()
-    {
-        // Actually functionality to Upload a file
-    }
-
-    public void ShouldExitStartup()
-    {
-        startUpPanelExit.enabled = true;
-    }
-
-    public void AboutButton()
+    public void HandleAboutButton()
     {
         Highlight();
     }
+
+    public void HandleContinueToMapButton()
+    {
+        Highlight();
+        ShouldExitStartup();
+    }
+    // ***********************************
+
+
+
+
 
     private void InitializeHighlightingObjects()
     {
@@ -52,4 +55,23 @@ public class ButtonCalls : MonoBehaviour
     {
         highlightAnimator.Play("BlueHighlighting");
     }
+
+    private void UploadFile()
+    {
+        // Actually functionality to Upload a file
+    }
+
+    public void ShouldExitStartup()
+    {
+        StartCoroutine(TransitionTime());
+        
+    }
+
+    IEnumerator TransitionTime()
+    {
+        yield return new WaitForSeconds(0.5f);
+        startUpPanelExit.enabled = true;
+    }
+
+
 }
