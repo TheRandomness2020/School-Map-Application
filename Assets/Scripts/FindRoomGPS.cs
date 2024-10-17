@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class FindRoomGPS : MonoBehaviour
 {
+    [SerializeField]private TMP_Dropdown roomDropDown;
     public Transform target; 
     public float rayDistance = 5f;
     public float stepSize = 1f;
     public int maxDepth = 10;
+    public GlobalControlandVars gCV;
+    public LineRenderer lineRenderer;
 
     public List<Vector3> pathPoints = new List<Vector3>(); 
 
@@ -18,13 +22,31 @@ public class FindRoomGPS : MonoBehaviour
 
     public void FindPathToRoom()
     {
-        pathPoints.Clear();
-        if (FindPath(transform.position, target.position))
+        if(!gCV.StudentMode)
         {
-            Debug.Log("Found");
+            ManagerRoomChange();
         }
-        pathPoints.RemoveAt(0);
-        DrawPath();
+        else
+        {
+            gCV.roomCustomPanel.SetActive(false);
+            pathPoints.Clear();
+            target = gCV.rooms[roomDropDown.value].transform;
+            if (FindPath(transform.position, target.position))
+            {
+                Debug.Log("Found");
+            }
+            pathPoints.RemoveAt(0);
+            DrawPath();
+        }
+    }
+    public void ManagerRoomChange()
+    {
+        gCV.roomCustomTextInput.text = gCV.rooms[roomDropDown.value].name;
+        gCV.roomCustomPanel.SetActive(true);
+    }
+    public void ChangeRoomName()
+    {
+        gCV.rooms[roomDropDown.value].name = gCV.roomCustomTextInput.text;
     }
 
     private bool FindPath(Vector3 startPos, Vector3 targetPos)
@@ -95,9 +117,11 @@ public class FindRoomGPS : MonoBehaviour
 
     private void DrawPath()
     {
-        for (int i = 0; i < pathPoints.Count - 1; i++)
+        if (pathPoints.Count != lineRenderer.positionCount)
         {
-            Debug.DrawLine(pathPoints[i], pathPoints[i + 1], Color.red, 5f);
+            lineRenderer.positionCount = pathPoints.Count;
         }
+        for(int i = 0; i < pathPoints.Count; i++)
+            lineRenderer.SetPosition(i,pathPoints[i] - lineRenderer.transform.parent.transform.position);
     }
 }

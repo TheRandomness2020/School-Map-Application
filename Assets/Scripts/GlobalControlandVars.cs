@@ -5,6 +5,13 @@ using TMPro;
 
 public class GlobalControlandVars : MonoBehaviour
 {
+    public Camera MainCamera;
+    [Header("Student Values")]
+    public bool StudentMode;
+    public GPSValue current_Location;
+    [Header("Manager Values")]
+    public GPSTestOne GPSScript;
+    public GameObject gpsButton;
     public GameObject clickDotPrefab;
     public bool isAddingHalls;
     public bool isAddingStairs;
@@ -14,6 +21,15 @@ public class GlobalControlandVars : MonoBehaviour
     public Material selectedMaterial;
     public Material baseLineMaterial;
     public GameObject deleteButton;
+    public TMP_Dropdown roomDropDown;
+    public GameObject PersonObject;
+    public List<GameObject> FloorsButtons;
+    public GameObject NewFloorButton;
+    public GameObject DoneButton;
+
+    public GameObject roomCustomPanel;
+    public TMP_InputField roomCustomTextInput;
+
     // int - index
     // GameObject - point may make a vector
     // bool - continueus
@@ -36,6 +52,28 @@ public class GlobalControlandVars : MonoBehaviour
 
     void Update()
     {
+        for(int i = 0; i < FloorsButtons.Count; i++)
+        {
+            if(!StudentMode)
+            {
+                FloorsButtons[i].SetActive(false);
+            }
+            else
+            {
+                FloorsButtons[i].SetActive(true);
+            }
+        }
+        if(StudentMode)
+        {
+            NewFloorButton.SetActive(false);
+            DoneButton.SetActive(false);
+            deleteButton.transform.parent.gameObject.SetActive(false);
+        }
+        else
+        {
+            NewFloorButton.SetActive(true);
+            DoneButton.SetActive(true);
+        }
         hallJoints.Clear();
         for(int x = 0; x < hallPoints.Count; x++)
         {
@@ -60,7 +98,10 @@ public class GlobalControlandVars : MonoBehaviour
         }
         if(selectedObject2D != null && selectedObject2D.GetComponent<Room>() != null)
         {
-            deleteButton.transform.parent.gameObject.SetActive(true);
+            if(!StudentMode)
+                deleteButton.transform.parent.gameObject.SetActive(true);
+            else
+                deleteButton.transform.parent.gameObject.SetActive(false);
             buttonText = deleteButton.GetComponent<TextMeshProUGUI>();
             buttonText.text = "Delete Room " + selectedObject2D.GetComponent<Room>().roomNumber;
         }
@@ -72,6 +113,15 @@ public class GlobalControlandVars : MonoBehaviour
         {
             selectedObject2D = null;
         }
+        for(int i = 0; i < rooms.Count; i++)
+        {
+            if(roomDropDown.options.Count < rooms.Count)
+                roomDropDown.options.Add(new TMP_Dropdown.OptionData(rooms[i].name, null));
+            else
+                roomDropDown.options[i].text = rooms[i].name;
+        }
+        //GPSScript.gpsOut.text = "Location: " + current_Location.latitude + " " + current_Location.longitude + " " + current_Location.altitude;
+        gpsButton.SetActive(!StudentMode);
     }
     public void DeleteRoom()
     {
@@ -81,17 +131,30 @@ public class GlobalControlandVars : MonoBehaviour
             {
                 Destroy(room);
                 rooms.Remove(room);
+                roomDropDown.options.RemoveAt(rooms.IndexOf(room));
                 deleteButton.transform.parent.gameObject.SetActive(false);
                 break;
             }
         }
     }
-
     float distance(Vector3 v1, Vector3 v2)
     {
         return Mathf.Sqrt(Mathf.Pow(v2.x - v1.x,2) + Mathf.Pow(v2.y - v1.y,2) + Mathf.Pow(v2.z - v1.z,2));
     }
+    public void SetGPSPivot()
+    {
+        CameraGotoPerson();
+        //current_Location.latitude = GPSScript.latitude;
+        //current_Location.longitude = GPSScript.longitude;
+        //current_Location.altitude = GPSScript.altitude;
+    }
+    public void CameraGotoPerson()
+    {
+        roomCustomPanel.SetActive(false);
+        MainCamera.transform.position = new Vector3(PersonObject.transform.position.x,PersonObject.transform.position.y,MainCamera.transform.position.z);
+    }
 }
+
 public class hallJoint
     {
         public GameObject jointObject;
@@ -102,4 +165,10 @@ public class hallJoint
             jointObject = g;
             continuous = b;
         }
+    }
+public class GPSValue
+    {
+        public double latitude;
+        public double longitude;
+        public double altitude;
     }
