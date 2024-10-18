@@ -11,7 +11,7 @@ public class Room : MonoBehaviour
     public GameObject pointTester;
     public Material material;
     public int roomNumber;
-    public int floor;
+    public int floor = 0;
     public float width = 10;
     public float depth = 10;
     public int numCorners = 4;

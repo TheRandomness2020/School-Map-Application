@@ -41,12 +41,12 @@ public class FindRoomGPS : MonoBehaviour
     }
     public void ManagerRoomChange()
     {
-        gCV.roomCustomTextInput.text = gCV.rooms[roomDropDown.value].name;
+        gCV.roomCustomTextInput.text = gCV.rooms[gCV.roomNumberIndex[roomDropDown.value]].name;
         gCV.roomCustomPanel.SetActive(true);
     }
     public void ChangeRoomName()
     {
-        gCV.rooms[roomDropDown.value].name = gCV.roomCustomTextInput.text;
+        gCV.rooms[gCV.roomNumberIndex[roomDropDown.value]].name = gCV.roomCustomTextInput.text;
     }
 
     private bool FindPath(Vector3 startPos, Vector3 targetPos)
@@ -86,7 +86,7 @@ public class FindRoomGPS : MonoBehaviour
         }
 
         Debug.LogWarning("Max recursion depth reached");
-        return false;
+        return FindPath(startPos + new Vector3(0,-5,0), targetPos);
     }
 
     private void ConstructPath(Dictionary<Vector3, Vector3> cameFrom, Vector3 currentPos, Vector3 targetPos)

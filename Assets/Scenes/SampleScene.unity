@@ -3596,8 +3596,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomDropDown: {fileID: 1701382380}
   target: {fileID: 0}
-  rayDistance: 50
-  stepSize: 20
+  rayDistance: 5
+  stepSize: 1
   maxDepth: 10
   gCV: {fileID: 498381915}
   lineRenderer: {fileID: 499422530}

@@ -26,6 +26,13 @@ public class GlobalControlandVars : MonoBehaviour
     public List<GameObject> FloorsButtons;
     public GameObject NewFloorButton;
     public GameObject DoneButton;
+    public int floorNumberRooms = 0;
+
+    public List<int> roomNumberIndex;
+
+    public int GlobalFloorView;
+
+    private int tempGFV;
 
     public GameObject roomCustomPanel;
     public TMP_InputField roomCustomTextInput;
@@ -113,10 +120,19 @@ public class GlobalControlandVars : MonoBehaviour
         {
             selectedObject2D = null;
         }
+        floorNumberRooms = 0;
+        if (GlobalFloorView != tempGFV) {roomDropDown.options.Clear(); roomNumberIndex.Clear();}
+        tempGFV = GlobalFloorView;
         for(int i = 0; i < rooms.Count; i++)
         {
-            if(roomDropDown.options.Count < rooms.Count)
-                roomDropDown.options.Add(new TMP_Dropdown.OptionData(rooms[i].name, null));
+            if(rooms[i].GetComponent<Room>().floor == GlobalFloorView) {floorNumberRooms++;}
+            if (roomNumberIndex.Count < floorNumberRooms) 
+                roomNumberIndex.Add(i);
+        }
+        for(int i = 0; i < floorNumberRooms; i++)
+        {
+            if(roomDropDown.options.Count < floorNumberRooms)
+                roomDropDown.options.Add(new TMP_Dropdown.OptionData(rooms[roomNumberIndex[i]].name, null));
             else
                 roomDropDown.options[i].text = rooms[i].name;
         }
