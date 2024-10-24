@@ -1,3 +1,8 @@
-Hello Congrestional App Challenge people
-This is not the code file the most updated code branch 
-is MapCustomization
+Hello Congressional App Challenge people.
+
+This is the master branch.
+
+The other branches are just small parts that were merged 
+into this branch
+
+thank you for your consideration.
