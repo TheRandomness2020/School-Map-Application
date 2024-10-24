@@ -12,9 +12,11 @@ public class MapProcessor : MonoBehaviour
     public Vector3 rotationOffset = Vector3.zero;
     public float mergeThreshold = 5f;
     public float edgeFlushThreshold = 5f;
-    public Material frontPlane;
+    public List<Material> frontPlane;
     public Material wallMaterial;
     public GlobalControlandVars gCV;
+
+    public List<GameObject> roomObjects;
 
     public List<RoomInfo> roomInfos = new List<RoomInfo>();
 
@@ -34,12 +36,18 @@ public class MapProcessor : MonoBehaviour
         }
 
         ProcessMap(mapTexture);
+        
+        
         //this.transform.rotation = Quaternion.Euler(this.transform.rotation.x + 90, 0, 0);
+    }
+    public void ProcessMapButton()
+    {
+        gCV.numFloors++;
+        ProcessMap(mapTexture);
     }
 
     void ProcessMap(Texture2D texture)
     {
-        CreateMapGameObject(texture);
         Texture2D grayTexture = ConvertToGrayscale(texture);
         Texture2D edgeTexture = DetectEdges(grayTexture);
         List<List<Vector2>> rooms = DetectRooms(edgeTexture);
@@ -51,22 +59,26 @@ public class MapProcessor : MonoBehaviour
         MergeCornersWithEdges(roomInfos);
 
         PlacePointsInRooms(roomInfos);
-        MovePointsToGameObjectPosition();
+        CreateMapGameObject(texture);
+        MovePointsToGameObjectPosition(roomObjects);
     }
     void CreateMapGameObject(Texture2D texture)
     {
         GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
         plane.transform.localScale = new Vector3(texture.width/10,1,texture.height/10);
         plane.transform.parent = transform;
-        plane.transform.position = new Vector3(texture.width/2,texture.height/2,5);
+        plane.transform.position = new Vector3(texture.width/2,texture.height/2,5) + MoveOffset;
         plane.transform.rotation = Quaternion.Euler(90, -90, 90);
+        gCV.Maps.Add(plane);
+        MapPlane script = plane.AddComponent<MapPlane>();
+        script.floor = gCV.numFloors - 1;
         plane.layer = 2;
 
-        frontPlane.mainTexture = texture;
+        frontPlane[gCV.numFloors - 1].mainTexture = texture;
 
         // Apply to Plane
         MeshRenderer mr = plane.GetComponent<MeshRenderer> ();
-        mr.material = frontPlane;
+        mr.material = frontPlane[gCV.numFloors - 1];
     }
 
     Texture2D ConvertToGrayscale(Texture2D texture)
@@ -337,10 +349,12 @@ public class MapProcessor : MonoBehaviour
 
     void PlacePointsInRooms(List<RoomInfo> roomInfos)
     {
+        roomObjects.Clear();
         foreach (var roomInfo in roomInfos)
         {
             Vector3 centerPosition = new Vector3(roomInfo.roomPoint.x, roomInfo.roomPoint.y, 0);
             GameObject roomPoint = Instantiate(roomPointPrefab, centerPosition, Quaternion.identity);
+            roomObjects.Add(roomPoint);
             roomPoint.name = "Room : " + roomInfo.roomNumber;
             roomPoint.layer = 6;
             gCV.rooms.Add(roomPoint);
@@ -348,6 +362,7 @@ public class MapProcessor : MonoBehaviour
 
             roomPoint.AddComponent<MovementRoom>();
             Room roomComponent = roomPoint.AddComponent<Room>();
+            roomComponent.floor = gCV.numFloors - 1;
             roomComponent.material = wallMaterial;
             roomComponent.roomNumber = roomInfo.roomNumber;
             //roomComponent.InitializeRoom(roomInfo.roomPoint, roomInfo.corners);
@@ -428,13 +443,13 @@ public class MapProcessor : MonoBehaviour
         }
     }
 
-    void MovePointsToGameObjectPosition()
+    void MovePointsToGameObjectPosition(List<GameObject> objectsToMove)
     {
         Vector3 offset = MoveOffset;
 
-        foreach (Transform child in transform)
+        foreach (GameObject child in objectsToMove)
         {
-            child.position += offset;
+            child.transform.position += offset;
         }
     }
 

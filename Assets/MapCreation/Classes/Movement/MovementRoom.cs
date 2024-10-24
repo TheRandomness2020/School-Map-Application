@@ -22,20 +22,23 @@ public class MovementRoom : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if(selectedObject != null)
             offset = selectedObject.transform.position - mousePosition;
-        checkForRoomClick();
+        if(gCV.StudentMode == false) {checkForRoomClick();} else {isMovingRoom = false;}
         //checkForDrag();
         if(isMovingRoom)
         {
-            GetComponent<Room>().material = gCV.selectedMaterial;
+            if(!GetComponent<Room>().Stair)
+                GetComponent<Room>().material = gCV.selectedMaterial;
             createDot();
             checkForDrag();
         }
         else
         {
-            GetComponent<Room>().material = gCV.baseLineMaterial;
+            if(!GetComponent<Room>().Stair)
+                GetComponent<Room>().material = gCV.baseLineMaterial;
             removeDot();
         }
     }
@@ -64,6 +67,10 @@ public class MovementRoom : MonoBehaviour
             foreach(GameObject room in gCV.rooms)
             {
                 room.GetComponent<MovementRoom>().isMovingRoom = false;
+            }
+            foreach(GameObject stair in gCV.Stairs)
+            {
+                stair.GetComponent<MovementRoom>().isMovingRoom = false;
             }
             isMovingRoom = true;
         }

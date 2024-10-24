@@ -122,14 +122,16 @@ public class HallGenertationScript : MonoBehaviour
                 wall.layer = 6;
                 wall.transform.parent = this.transform;
                 wall.name = "Wall " + x;
-                /*if(x + 1 == inputCorners.Count)
+                if(x + 1 == inputCorners.Count)
                 {
+                    /*
                     wall.transform.localPosition = new Vector3((corners[x].transform.position.x + corners[0].transform.position.x)  / 2,(corners[x].transform.position.y + corners[0].transform.position.y)  / 2,(corners[x].transform.position.z + corners[0].transform.position.z)  / 2);
                     
                     wall.GetComponent<Wall>().startPoint = corners[x].transform;
                     wall.GetComponent<Wall>().endPoint = corners[0].transform;
+                    */
                 }
-                else*/ if (isCorrnerContinueus[x] == true)
+                else if (isCorrnerContinueus[x] == true)
                 {
                     wall.transform.localPosition = new Vector3((corners[x].transform.position.x + corners[x + 1].transform.position.x)  / 2,(corners[x].transform.position.y + corners[x + 1].transform.position.y)  / 2,(corners[x].transform.position.z + corners[x + 1].transform.position.z)  / 2);
                     

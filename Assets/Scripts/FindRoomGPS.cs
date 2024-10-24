@@ -30,7 +30,7 @@ public class FindRoomGPS : MonoBehaviour
         {
             gCV.roomCustomPanel.SetActive(false);
             pathPoints.Clear();
-            target = gCV.rooms[roomDropDown.value].transform;
+            target = gCV.rooms[gCV.StudentDropdown.value].transform;
             if (FindPath(transform.position, target.position))
             {
                 Debug.Log("Found");
@@ -41,12 +41,12 @@ public class FindRoomGPS : MonoBehaviour
     }
     public void ManagerRoomChange()
     {
-        gCV.roomCustomTextInput.text = gCV.rooms[gCV.roomNumberIndex[roomDropDown.value]].name;
+        gCV.roomCustomTextInput.text = gCV.rooms[gCV.roomNumberIndex[gCV.roomDropDown.value]].name;
         gCV.roomCustomPanel.SetActive(true);
     }
     public void ChangeRoomName()
     {
-        gCV.rooms[gCV.roomNumberIndex[roomDropDown.value]].name = gCV.roomCustomTextInput.text;
+        gCV.rooms[gCV.roomNumberIndex[gCV.roomDropDown.value]].name = gCV.roomCustomTextInput.text;
     }
 
     private bool FindPath(Vector3 startPos, Vector3 targetPos)
